@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ziyad Ahmed Hashem — Biomedical Engineer & Freelancer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS VARIABLES & RESET
+═══════════════════════════════════════════ */
+:root {
+  --bg: #060d1a;
+  --bg2: #0b1628;
+  --bg3: #0f1f35;
+  --cyan: #00e5ff;
+  --cyan2: #00b4cc;
+  --purple: #8b5cf6;
+  --purple2: #6d28d9;
+  --text: #f0f6ff;
+  --text2: #8ba3c7;
+  --text3: #4d6a8a;
+  --border: rgba(0,229,255,0.12);
+  --card: rgba(11,22,40,0.85);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+[data-theme="light"] {
+  --bg: #f0f4ff;
+  --bg2: #e4eaf8;
+  --bg3: #dae2f5;
+  --text: #0a1428;
+  --text2: #3d5478;
+  --text3: #7a95bc;
+  --border: rgba(0,180,204,0.2);
+  --card: rgba(224,232,248,0.9);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ═══════════════════════════════════════════
+   ANIMATED BACKGROUND
+═══════════════════════════════════════════ */
+.bg-orbs {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.orb {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18;
+  animation: orb-float 20s infinite ease-in-out;
+}
+.orb-1 { width: 600px; height: 600px; background: var(--cyan); top: -200px; left: -200px; animation-delay: 0s; }
+.orb-2 { width: 500px; height: 500px; background: var(--purple); bottom: -150px; right: -150px; animation-delay: -7s; }
+.orb-3 { width: 400px; height: 400px; background: #00bfff; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: -14s; opacity: 0.08; }
+@keyframes orb-float {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(40px,-30px) scale(1.05); }
+  66% { transform: translate(-30px,40px) scale(0.95); }
+}
+
+/* ECG PULSE LINE */
+.ecg-line {
+  position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; z-index: 1; pointer-events: none; opacity: 0.15;
+}
+.ecg-svg { width: 100%; height: 100%; }
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5%; height: 70px;
+  background: rgba(6,13,26,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+[data-theme="light"] nav { background: rgba(240,244,255,0.85); }
+.nav-logo {
+  font-family: var(--font-display); font-size: 1.6rem; font-weight: 800;
+  color: var(--cyan); letter-spacing: -1px;
+}
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a {
+  font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em;
+  color: var(--text2); text-transform: uppercase;
+  transition: color 0.2s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px;
+  background: var(--cyan); transform: scaleX(0); transition: transform 0.2s;
+}
+.nav-links a:hover { color: var(--cyan); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.theme-btn {
+  background: var(--border); border: 1px solid var(--border); border-radius: 20px;
+  width: 44px; height: 24px; cursor: pointer; position: relative; flex-shrink: 0;
+  transition: background 0.3s;
+}
+.theme-btn::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--cyan); transition: transform 0.3s;
+}
+[data-theme="light"] .theme-btn::after { transform: translateX(20px); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
+
+/* ═══════════════════════════════════════════
+   HERO SECTION
+═══════════════════════════════════════════ */
+#hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 100px 5% 60px; position: relative; z-index: 2;
+  gap: 4rem;
+}
+.hero-left { flex: 1; max-width: 620px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--cyan);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2);
+  padding: 6px 14px; border-radius: 20px; margin-bottom: 1.5rem;
+}
+.hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+.hero-name {
+  font-family: var(--font-display); font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 800; line-height: 1.05; letter-spacing: -2px; margin-bottom: 1.2rem;
+}
+.hero-name .line1 { color: var(--text); display: block; }
+.hero-name .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-bio {
+  color: var(--text2); font-size: 1.05rem; line-height: 1.75;
+  max-width: 520px; margin-bottom: 2rem;
+}
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--cyan); color: #060d1a; font-family: var(--font-display);
+  font-weight: 700; font-size: 0.9rem; letter-spacing: 0.03em;
+  padding: 12px 24px; border-radius: 50px; border: none; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,229,255,0.35); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--cyan); font-family: var(--font-display);
+  font-weight: 700; font-size: 0.9rem; letter-spacing: 0.03em;
+  padding: 12px 24px; border-radius: 50px; border: 1.5px solid var(--cyan); cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-outline:hover { background: rgba(0,229,255,0.08); transform: translateY(-2px); }
+.hero-avatar {
+  width: 130px; height: 130px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--bg3), var(--bg2));
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 2.4rem; font-weight: 800; color: var(--cyan);
+  margin-bottom: 2rem; position: relative; flex-shrink: 0;
+}
+.hero-avatar::after {
+  content: ''; position: absolute; inset: -6px; border-radius: 50%;
+  border: 1.5px solid rgba(0,229,255,0.4);
+  animation: avatar-ring 3s infinite linear;
+}
+@keyframes avatar-ring {
+  0%{box-shadow: 0 0 0 0 rgba(0,229,255,0.4)} 50%{box-shadow: 0 0 0 8px rgba(0,229,255,0)} 100%{box-shadow: 0 0 0 0 rgba(0,229,255,0)}
+}
+.hero-socials { display: flex; gap: 1rem; }
+.social-link {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(0,229,255,0.06); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: var(--text2);
+  transition: all 0.2s;
+}
+.social-link:hover { background: rgba(0,229,255,0.12); color: var(--cyan); transform: translateY(-3px); border-color: var(--cyan); }
+.hero-right {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative;
+}
+.hero-tech-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+  max-width: 320px;
+}
+.tech-chip {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--text2);
+  transition: all 0.3s;
+}
+.tech-chip:hover { border-color: var(--cyan); color: var(--cyan); transform: scale(1.04); }
+.tech-chip .icon { font-size: 1.2rem; }
+.hero-stat-row { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; }
+.hero-stat { text-align: center; }
+.hero-stat .num { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--cyan); line-height: 1; }
+.hero-stat .lbl { font-size: 0.72rem; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 2px; }
+
+/* ═══════════════════════════════════════════
+   SECTION BASE
+═══════════════════════════════════════════ */
+section { padding: 80px 5%; position: relative; z-index: 2; }
+.section-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--cyan);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.section-tag::before { content: '//'; color: var(--text3); }
+.section-title {
+  font-family: var(--font-display); font-size: clamp(1.8rem,3vw,2.6rem);
+  font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+.section-title span { color: var(--cyan); }
+.section-sub { color: var(--text2); font-size: 1rem; margin-bottom: 3rem; max-width: 560px; }
+.divider { width: 60px; height: 3px; background: linear-gradient(90deg,var(--cyan),var(--purple)); border-radius: 2px; margin: 1rem 0 2.5rem; }
+
+/* ═══════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════ */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(8px);
+}
+.card:hover { transform: translateY(-4px); border-color: rgba(0,229,255,0.3); box-shadow: 0 16px 40px rgba(0,0,0,0.3); }
+.card-icon { font-size: 2rem; margin-bottom: 1rem; }
+.card h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+.card p { color: var(--text2); font-size: 0.9rem; line-height: 1.6; }
+
+/* TAGS */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem; }
+.tag {
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 6px;
+  border: 1px solid rgba(0,229,255,0.25); color: var(--cyan);
+  background: rgba(0,229,255,0.05);
+}
+.tag.purple { border-color: rgba(139,92,246,0.3); color: var(--purple); background: rgba(139,92,246,0.05); }
+.tag.green { border-color: rgba(16,185,129,0.3); color: #10b981; background: rgba(16,185,129,0.05); }
+
+/* ═══════════════════════════════════════════
+   ABOUT SECTION
+═══════════════════════════════════════════ */
+.about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; align-items: start; }
+.about-info-cards { display: flex; flex-direction: column; gap: 1rem; }
+.info-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.info-card .ic-icon { font-size: 1.3rem; flex-shrink: 0; }
+.info-card .ic-label { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+.info-card .ic-value { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+.services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 1.5rem; }
+.service-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 20px;
+  transition: all 0.3s;
+}
+.service-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-3px); }
+.service-card .s-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
+.service-card h4 { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem; }
+.service-card p { font-size: 0.8rem; color: var(--text2); line-height: 1.5; }
+
+/* ═══════════════════════════════════════════
+   EDUCATION SECTION
+═══════════════════════════════════════════ */
+.edu-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; align-items: start; }
+.edu-main { grid-column: auto; }
+.edu-header { display: flex; align-items: center; gap: 16px; margin-bottom: 1.2rem; }
+.edu-logo {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: linear-gradient(135deg, #1a3050, #0d2040);
+  border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; color: var(--cyan);
+  flex-shrink: 0;
+}
+.edu-meta h3 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; }
+.edu-meta p { color: var(--text2); font-size: 0.88rem; }
+.edu-stats { display: flex; gap: 1.5rem; margin: 1.2rem 0; flex-wrap: wrap; }
+.edu-stat { text-align: center; }
+.edu-stat .n { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--cyan); }
+.edu-stat .l { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+.depi-card { background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(0,229,255,0.04)); border: 1px solid rgba(139,92,246,0.2); }
+.status-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.68rem; color: #10b981; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); padding: 3px 10px; border-radius: 20px; margin-bottom: 0.5rem; }
+.status-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:#10b981; animation:pulse 2s infinite; }
+.view-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.05em;
+  color: var(--cyan); background: rgba(0,229,255,0.06); border: 1px solid rgba(0,229,255,0.2);
+  padding: 7px 16px; border-radius: 8px; cursor: pointer;
+  transition: all 0.2s; margin-top: 1rem;
+}
+.view-btn:hover { background: rgba(0,229,255,0.12); border-color: var(--cyan); }
+
+/* ═══════════════════════════════════════════
+   SKILLS SECTION
+═══════════════════════════════════════════ */
+.skills-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; }
+.skill-bar-item { margin-bottom: 1.4rem; }
+.skill-bar-header { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.skill-bar-header span:first-child { font-size: 0.9rem; font-weight: 500; }
+.skill-bar-header span:last-child { font-family: var(--font-mono); font-size: 0.78rem; color: var(--cyan); }
+.bar-track { background: rgba(255,255,255,0.06); border-radius: 20px; height: 7px; overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 20px;
+  background: linear-gradient(90deg, var(--cyan2), var(--cyan));
+  width: 0%; transition: width 1.2s cubic-bezier(0.25,1,0.5,1);
+}
+.bar-fill.purple-fill { background: linear-gradient(90deg, var(--purple2), var(--purple)); }
+.soft-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+.soft-chip {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px; font-size: 0.88rem;
+  transition: all 0.2s;
+}
+.soft-chip:hover { border-color: rgba(0,229,255,0.3); color: var(--cyan); }
+.soft-chip .ic { font-size: 1.1rem; }
+.tools-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; }
+.tool-tag {
+  font-family: var(--font-mono); font-size: 0.72rem; padding: 5px 12px;
+  border-radius: 8px; border: 1px solid var(--border); color: var(--text2);
+  background: rgba(255,255,255,0.02); transition: all 0.2s;
+}
+.tool-tag:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ═══════════════════════════════════════════
+   EXPERIENCE SECTION
+═══════════════════════════════════════════ */
+.exp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.exp-card { position: relative; overflow: hidden; }
+.exp-card::before {
+  content:''; position:absolute; top:0; left:0; width:3px; height:100%;
+  background: linear-gradient(180deg, var(--cyan), var(--purple));
+}
+.exp-role { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 3px; }
+.exp-org { color: var(--cyan); font-size: 0.88rem; font-weight: 500; margin-bottom: 4px; }
+.exp-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text3); margin-bottom: 1rem; }
+.exp-list { list-style: none; padding: 0; }
+.exp-list li { font-size: 0.88rem; color: var(--text2); padding: 4px 0 4px 18px; position: relative; line-height: 1.5; }
+.exp-list li::before { content:'▸'; position:absolute; left:0; color:var(--cyan); font-size:0.7rem; top:6px; }
+.dept-pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.8rem 0; }
+.dept-pill { font-size: 0.72rem; padding: 3px 10px; border-radius: 6px; background: rgba(0,229,255,0.06); border: 1px solid rgba(0,229,255,0.15); color: var(--text2); }
+.platform-logos { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.8rem 0; }
+.platform-pill { font-family: var(--font-mono); font-size: 0.7rem; padding: 4px 10px; border-radius: 6px; background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.2); color: var(--purple); }
+
+/* ═══════════════════════════════════════════
+   PROJECTS SECTION
+═══════════════════════════════════════════ */
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+.project-card { display: flex; flex-direction: column; }
+.project-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+.project-icon { font-size: 2rem; }
+.project-links { display: flex; gap: 8px; }
+.proj-link {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+  color: var(--text2); transition: all 0.2s;
+}
+.proj-link:hover { background: rgba(0,229,255,0.08); color: var(--cyan); border-color: var(--cyan); }
+.project-card h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+.project-card p { color: var(--text2); font-size: 0.88rem; line-height: 1.6; flex: 1; }
+.coming-soon-card { opacity: 0.5; border-style: dashed; }
+.coming-badge { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text3); background: rgba(255,255,255,0.04); padding: 3px 10px; border-radius: 6px; border: 1px solid var(--border); }
+
+/* ═══════════════════════════════════════════
+   CONTACT SECTION
+═══════════════════════════════════════════ */
+.contact-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; align-items: start; }
+.contact-info-cards { display: flex; flex-direction: column; gap: 1rem; }
+.contact-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 18px 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.contact-card .cc-icon { font-size: 1.5rem; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(0,229,255,0.06); border-radius: 10px; flex-shrink: 0; }
+.contact-card .cc-label { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+.contact-card .cc-value { font-size: 0.88rem; color: var(--text); font-weight: 500; }
+.contact-socials { display: flex; gap: 10px; margin-top: 1.5rem; }
+.contact-social {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--card); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  color: var(--text2); transition: all 0.2s;
+}
+.contact-social:hover { background: rgba(0,229,255,0.08); color: var(--cyan); border-color: var(--cyan); transform: translateY(-3px); }
+.contact-form { display: flex; flex-direction: column; gap: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 0.78rem; font-weight: 500; color: var(--text2); letter-spacing: 0.03em; }
+.form-group input, .form-group textarea {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 12px 16px; color: var(--text); font-family: var(--font-body); font-size: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  width: 100%;
+}
+.form-group input:focus, .form-group textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0,229,255,0.08); }
+.form-group textarea { resize: vertical; min-height: 130px; }
+.form-submit { align-self: flex-start; }
+.form-note { font-size: 0.78rem; color: var(--text3); margin-top: 8px; }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background: rgba(0,0,0,0.3); border-top: 1px solid var(--border);
+  padding: 40px 5%; text-align: center; position: relative; z-index: 2;
+}
+.footer-name { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; }
+.footer-name span { color: var(--cyan); }
+.footer-links { display: flex; justify-content: center; gap: 1.5rem; margin: 1rem 0; }
+.footer-links a { font-size: 0.82rem; color: var(--text3); transition: color 0.2s; }
+.footer-links a:hover { color: var(--cyan); }
+.footer-copy { font-size: 0.78rem; color: var(--text3); }
+
+/* ═══════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 20px; max-width: 800px; width: 100%;
+  max-height: 85vh; overflow-y: auto;
+  padding: 36px; transform: translateY(20px);
+  transition: transform 0.3s;
+}
+.modal-overlay.open .modal-box { transform: translateY(0); }
+.modal-close {
+  position: sticky; top: 0; float: right; margin-bottom: 1rem;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  cursor: pointer; font-size: 1.2rem; color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+.modal-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; }
+.modal-sub { color: var(--text2); font-size: 0.9rem; margin-bottom: 2rem; }
+.dept-block { margin-bottom: 1.8rem; }
+.dept-block h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--cyan); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
+.dept-block ul { list-style: none; padding: 0; }
+.dept-block ul li { font-size: 0.88rem; color: var(--text2); padding: 3px 0 3px 16px; position: relative; }
+.dept-block ul li::before { content:'▸'; position:absolute; left:0; color:var(--cyan); font-size:0.65rem; top:5px; }
+.courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 8px; margin-top: 1rem; }
+.course-item { font-size: 0.8rem; color: var(--text2); padding: 8px 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; }
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  #hero { flex-direction: column; padding: 100px 5% 40px; gap: 2rem; }
+  .hero-right { display: none; }
+  .about-grid, .skills-layout, .contact-layout, .edu-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; position: fixed; top: 70px; left: 0; right: 0; background: var(--bg2); flex-direction: column; align-items: center; padding: 20px; gap: 1rem; border-bottom: 1px solid var(--border); }
+  .nav-links.open { display: flex; }
+  .hamburger { display: flex; }
+}
+@media (max-width: 480px) {
+  .hero-actions { flex-direction: column; }
+  .exp-grid { grid-template-columns: 1fr; }
+}
+
+/* ECG Animation */
+@keyframes ecg-move {
+  0%{transform: translateX(0)} 100%{transform: translateX(-50%)}
+}
+.ecg-path { animation: ecg-move 8s linear infinite; }
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- ECG LINE -->
+<div class="ecg-line">
+  <svg class="ecg-svg" viewBox="0 0 1400 60" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g class="ecg-path" stroke="#00e5ff" stroke-width="1.5">
+      <polyline points="0,30 60,30 80,30 90,10 100,50 110,5 120,55 130,30 150,30 210,30 230,30 240,12 250,48 260,8 270,52 280,30 300,30 360,30 380,30 390,10 400,50 410,5 420,55 430,30 450,30 510,30 530,30 540,12 550,48 560,8 570,52 580,30 600,30 660,30 680,30 690,10 700,50 710,5 720,55 730,30 750,30 810,30 830,30 840,12 850,48 860,8 870,52 880,30 900,30 960,30 980,30 990,10 1000,50 1010,5 1020,55 1030,30 1050,30 1110,30 1130,30 1140,12 1150,48 1160,8 1170,52 1180,30 1200,30 1260,30 1280,30 1290,10 1300,50 1310,5 1320,55 1330,30 1350,30 1400,30"/>
+      <polyline points="1400,30 1460,30 1480,30 1490,10 1500,50 1510,5 1520,55 1530,30 1550,30 1610,30 1630,30 1640,12 1650,48 1660,8 1670,52 1680,30 1700,30 1760,30 1780,30 1790,10 1800,50 1810,5 1820,55 1830,30 1850,30"/>
+    </g>
+  </svg>
+</div>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">ZA.</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"></button>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-avatar">ZA</div>
+    <div class="hero-badge">Available for freelance work</div>
+    <h1 class="hero-name">
+      <span class="line1">Ziyad Ahmed</span>
+      <span class="line2">Hashem</span>
+    </h1>
+    <p class="hero-bio">
+      Biomedical Equipment Engineering student at Beni Suef University with hands-on hospital training across 6 clinical departments. Freelancer specializing in CV writing, LinkedIn optimization, PowerPoint design, Excel, and Arabic↔English translation.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary" id="cvDownload">⬇ Download CV</a>
+      <a href="#projects" class="btn-outline">View Projects →</a>
+    </div>
+    <div class="hero-socials">
+      <a href="https://github.com/ziyad-ahmed03" target="_blank" class="social-link" title="GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a href="https://linkedin.com/in/ziyad-ahmed-bme" target="_blank" class="social-link" title="LinkedIn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="mailto:ziyad.ahmed.hashem@gmail.com" class="social-link" title="Email">✉</a>
+      <a href="https://www.fiverr.com/ziyad_ahmed01" target="_blank" class="social-link" title="Fiverr">🎯</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-tech-grid">
+      <div class="tech-chip"><span class="icon">🫀</span>BME</div>
+      <div class="tech-chip"><span class="icon">🐍</span>Python</div>
+      <div class="tech-chip"><span class="icon">📊</span>Excel</div>
+      <div class="tech-chip"><span class="icon">🔬</span>Clinical</div>
+      <div class="tech-chip"><span class="icon">📄</span>CV Write</div>
+      <div class="tech-chip"><span class="icon">🔗</span>LinkedIn</div>
+      <div class="tech-chip"><span class="icon">🎨</span>Slides</div>
+      <div class="tech-chip"><span class="icon">🌐</span>Arabic</div>
+      <div class="tech-chip"><span class="icon">☁️</span>Azure</div>
+    </div>
+    <div class="hero-stat-row">
+      <div class="hero-stat"><div class="num">6+</div><div class="lbl">Departments</div></div>
+      <div class="hero-stat"><div class="num">11</div><div class="lbl">Platforms</div></div>
+      <div class="hero-stat"><div class="num">82%</div><div class="lbl">GPA</div></div>
+      <div class="hero-stat"><div class="num">3+</div><div class="lbl">Domains</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section id="about">
+  <div class="reveal">
+    <div class="section-tag">About Me</div>
+    <h2 class="section-title">Who I <span>Am</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="about-grid">
+    <div class="reveal reveal-delay-1">
+      <div class="about-info-cards">
+        <div class="info-card">
+          <div class="ic-icon">📍</div>
+          <div><div class="ic-label">Location</div><div class="ic-value">Nasser, Beni Suef, Egypt</div></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">📱</div>
+          <div><div class="ic-label">Phone</div><div class="ic-value">+201212727518</div></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">✉️</div>
+          <div><div class="ic-label">Email</div><div class="ic-value">ziyad.ahmed.hashem@gmail.com</div></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">🎓</div>
+          <div><div class="ic-label">Status</div><div class="ic-value">Final Year — Graduating Aug 2026</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <p style="color:var(--text2);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem;">
+        Final-year Biomedical Equipment Engineering student with over a year of intensive hospital training across 6 clinical departments. Skilled in preventive and corrective maintenance, calibration, and troubleshooting of complex medical devices from global manufacturers including Dräger, Philips, GE Healthcare, and Siemens. <br><br>
+        Simultaneously pursuing a Data Engineering & AI scholarship through DEPI (AMIT Learning), building expertise in Python, SQL, Azure, and data pipelines. Active freelancer delivering professional services across 11 platforms including Mostaql, Upwork, Fiverr, and Freelancer.com.
+      </p>
+      <div class="section-tag">My Services</div>
+      <div class="services-grid">
+        <div class="service-card"><div class="s-icon">📝</div><h4>CV & Cover Letter</h4><p>ATS-optimized professional documents tailored to specific roles and industries</p></div>
+        <div class="service-card"><div class="s-icon">🔗</div><h4>LinkedIn Optimization</h4><p>Keyword-rich profiles with verified 100% completeness score</p></div>
+        <div class="service-card"><div class="s-icon">🎨</div><h4>PowerPoint Design</h4><p>Professional academic and business presentations across multiple domains</p></div>
+        <div class="service-card"><div class="s-icon">📊</div><h4>Advanced Excel</h4><p>Custom calculators, dashboards, formulas, and data tracking systems</p></div>
+        <div class="service-card"><div class="s-icon">🌐</div><h4>AR ↔ EN Translation</h4><p>Accurate, natural-sounding translation for technical and academic content</p></div>
+        <div class="service-card"><div class="s-icon">🏥</div><h4>Biomedical Technical</h4><p>Maintenance, calibration, and technical documentation for medical devices</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ EDUCATION ═══════════ -->
+<section id="education">
+  <div class="reveal">
+    <div class="section-tag">Education</div>
+    <h2 class="section-title">Academic <span>Background</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="edu-grid">
+    <div class="card reveal reveal-delay-1">
+      <div class="edu-header">
+        <div class="edu-logo">BSU</div>
+        <div class="edu-meta">
+          <h3>Beni Suef University</h3>
+          <p>Faculty of Applied Health Sciences Technology</p>
+        </div>
+      </div>
+      <p style="color:var(--text2);font-size:0.88rem;margin-bottom:0.8rem;">B.Sc. Biomedical Equipment Engineering — Expected Graduation: August 2026</p>
+      <div class="edu-stats">
+        <div class="edu-stat"><div class="n">3.1</div><div class="l">GPA / 4.0</div></div>
+        <div class="edu-stat"><div class="n">B+</div><div class="l">Grade</div></div>
+        <div class="edu-stat"><div class="n">82%</div><div class="l">Percentage</div></div>
+      </div>
+      <div class="tags">
+        <span class="tag">Biomedical Equipment</span>
+        <span class="tag">Medical Devices</span>
+        <span class="tag">Clinical Engineering</span>
+        <span class="tag">Hospital Technology</span>
+      </div>
+      <button class="view-btn" onclick="openModal('edu-modal')">📋 View Coursework & Details →</button>
+    </div>
+    <div class="card depi-card reveal reveal-delay-2">
+      <div class="status-badge">In Progress</div>
+      <div class="edu-header" style="margin-top:0.5rem;">
+        <div class="edu-logo" style="background:linear-gradient(135deg,#2d1b69,#1a0f3d);font-size:0.75rem;">DEPI</div>
+        <div class="edu-meta">
+          <h3>Data Engineering & AI</h3>
+          <p>AMIT Learning — Digital Egypt Pioneers Initiative</p>
+        </div>
+      </div>
+      <p style="color:var(--text2);font-size:0.88rem;margin-bottom:1rem;">November 2025 – July 2026 · 120 Hours · 40 Sessions</p>
+      <div class="tags">
+        <span class="tag purple">Python</span>
+        <span class="tag purple">SQL</span>
+        <span class="tag purple">Apache Spark</span>
+        <span class="tag purple">Microsoft Azure</span>
+        <span class="tag purple">Data Pipelines</span>
+        <span class="tag purple">AI / LangChain</span>
+      </div>
+      <p style="color:var(--text3);font-size:0.78rem;margin-top:1rem;">Target certification: Microsoft Azure Data Engineer Associate (DP-203)</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SKILLS ═══════════ -->
+<section id="skills">
+  <div class="reveal">
+    <div class="section-tag">Skills</div>
+    <h2 class="section-title">Capabilities & <span>Expertise</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="skills-layout">
+    <div class="reveal reveal-delay-1">
+      <h3 style="font-family:var(--font-display);font-size:0.9rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.5rem;">Technical Proficiency</h3>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>Biomedical Equipment Maintenance</span><span>90%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="90"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>CV & Resume Writing (ATS)</span><span>92%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="92"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>LinkedIn Profile Optimization</span><span>95%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="95"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>Microsoft Excel (Advanced)</span><span>85%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="85"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>PowerPoint Design</span><span>88%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="88"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>Arabic ↔ English Translation</span><span>95%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="95"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>Python (Data Engineering)</span><span>72%</span></div>
+        <div class="bar-track"><div class="bar-fill purple-fill" data-width="72"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>SQL & Database Management</span><span>70%</span></div>
+        <div class="bar-track"><div class="bar-fill purple-fill" data-width="70"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span>Arduino & Embedded Systems</span><span>78%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="78"></div></div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <h3 style="font-family:var(--font-display);font-size:0.9rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.5rem;">Soft Skills</h3>
+      <div class="soft-grid">
+        <div class="soft-chip"><span class="ic">🎯</span>Problem Solving</div>
+        <div class="soft-chip"><span class="ic">🔍</span>Attention to Detail</div>
+        <div class="soft-chip"><span class="ic">💬</span>Communication</div>
+        <div class="soft-chip"><span class="ic">⏱</span>Time Management</div>
+        <div class="soft-chip"><span class="ic">🔄</span>Adaptability</div>
+        <div class="soft-chip"><span class="ic">✍</span>Technical Writing</div>
+        <div class="soft-chip"><span class="ic">🤝</span>Negotiation</div>
+        <div class="soft-chip"><span class="ic">👑</span>Leadership</div>
+      </div>
+      <h3 style="font-family:var(--font-display);font-size:0.9rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.1em;margin:2rem 0 1rem;">Tools & Platforms</h3>
+      <div class="tools-grid">
+        <span class="tool-tag">VS Code</span>
+        <span class="tool-tag">Jupyter Notebook</span>
+        <span class="tool-tag">GitHub</span>
+        <span class="tool-tag">MS Office Suite</span>
+        <span class="tool-tag">MATLAB</span>
+        <span class="tool-tag">Arduino IDE</span>
+        <span class="tool-tag">Azure</span>
+        <span class="tool-tag">Docker</span>
+        <span class="tool-tag">Mostaql</span>
+        <span class="tool-tag">Upwork</span>
+        <span class="tool-tag">Fiverr</span>
+        <span class="tool-tag">Freelancer</span>
+        <span class="tool-tag">Pandas</span>
+        <span class="tool-tag">NumPy</span>
+        <span class="tool-tag">Apache Spark</span>
+        <span class="tool-tag">DuckDB</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ EXPERIENCE ═══════════ -->
+<section id="experience">
+  <div class="reveal">
+    <div class="section-tag">Experience</div>
+    <h2 class="section-title">Work & <span>Training</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="exp-grid">
+    <!-- Hospital -->
+    <div class="card exp-card reveal reveal-delay-1">
+      <div class="exp-role">Biomedical Equipment Engineering Trainee</div>
+      <div class="exp-org">🏥 Beni Suef University Hospital</div>
+      <div class="exp-date">Aug 2024 – Sep 2025 · Beni Suef, Egypt</div>
+      <div class="dept-pills">
+        <span class="dept-pill">Blood Bank</span>
+        <span class="dept-pill">ICU</span>
+        <span class="dept-pill">OR</span>
+        <span class="dept-pill">Radiology</span>
+        <span class="dept-pill">Physiotherapy</span>
+        <span class="dept-pill">General Wards</span>
+      </div>
+      <ul class="exp-list">
+        <li>Preventive & corrective maintenance across 6 clinical departments</li>
+        <li>Calibration, installation & performance verification of medical devices</li>
+        <li>Electrical safety testing per IEC 62353 standards</li>
+        <li>Brands: Dräger, Philips, GE Healthcare, Siemens, Mindray, SYSMEX</li>
+      </ul>
+      <div class="tags">
+        <span class="tag">Biomedical</span><span class="tag">Medical Devices</span>
+        <span class="tag">Calibration</span><span class="tag">Clinical Engineering</span>
+      </div>
+      <button class="view-btn" onclick="openModal('exp-modal')">🔬 View Per-Department Breakdown →</button>
+    </div>
+    <!-- Student Union -->
+    <div class="card exp-card reveal reveal-delay-2">
+      <div class="exp-role">Medical Devices Section Leader</div>
+      <div class="exp-org">🏛 Student Union — BSU Faculty of Applied Health Sciences</div>
+      <div class="exp-date">2022 – 2025 · 3 Consecutive Years</div>
+      <ul class="exp-list">
+        <li>Progressed: General Member → Scientific Committee Supervisor → Section Leader</li>
+        <li>Managed academic schedules, exam timetables & department coordination</li>
+        <li>Organized faculty-wide events, competitions, and student activities</li>
+        <li>Led faculty team in university knowledge competition (4th place)</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green">Leadership</span>
+        <span class="tag green">Student Union</span>
+        <span class="tag green">Team Management</span>
+      </div>
+    </div>
+    <!-- Freelancer -->
+    <div class="card exp-card reveal reveal-delay-3">
+      <div class="exp-role">Freelance Specialist</div>
+      <div class="exp-org">💼 Active Across 11 Platforms</div>
+      <div class="exp-date">Jan 2026 – Present</div>
+      <div class="platform-logos">
+        <span class="platform-pill">Mostaql</span>
+        <span class="platform-pill">Khamsat</span>
+        <span class="platform-pill">Upwork</span>
+        <span class="platform-pill">Fiverr</span>
+        <span class="platform-pill">Freelancer.com</span>
+        <span class="platform-pill">Hsoub</span>
+        <span class="platform-pill">Ba3eed</span>
+        <span class="platform-pill">Nafazly</span>
+        <span class="platform-pill">Kafeel</span>
+        <span class="platform-pill">Freelance Yard</span>
+        <span class="platform-pill">Al-Harefa</span>
+      </div>
+      <ul class="exp-list">
+        <li>CV & ATS-optimized resume writing (Arabic + English)</li>
+        <li>LinkedIn optimization — verified 100% profile score</li>
+        <li>PowerPoint design, Excel solutions & translation</li>
+      </ul>
+      <div class="tags">
+        <span class="tag purple">CV Writing</span>
+        <span class="tag purple">LinkedIn</span>
+        <span class="tag purple">PowerPoint</span>
+        <span class="tag purple">Translation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PROJECTS ═══════════ -->
+<section id="projects">
+  <div class="reveal">
+    <div class="section-tag">Projects</div>
+    <h2 class="section-title">What I've <span>Built</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="projects-grid">
+    <!-- Syringe Pump -->
+    <div class="card project-card reveal reveal-delay-1">
+      <div class="project-top">
+        <div class="project-icon">💉</div>
+        <div class="project-links">
+          <span class="proj-link" title="Graduation Project — In Progress">🔬</span>
+        </div>
+      </div>
+      <h3>Custom-Built Syringe Pump</h3>
+      <p>Full graduation project — Arduino-based syringe pump with TFT touchscreen UI, stepper motor control, IEC 60601-2-24 calibration, 3D-printed enclosure, and technical documentation book.</p>
+      <div class="tags" style="margin-top:auto;padding-top:1rem;">
+        <span class="tag">Arduino</span><span class="tag">C/C++</span>
+        <span class="tag">3D CAD</span><span class="tag">IEC 60601</span>
+      </div>
+    </div>
+    <!-- DuckDB Analytics -->
+    <div class="card project-card reveal reveal-delay-2">
+      <div class="project-top">
+        <div class="project-icon">⚡</div>
+        <div class="project-links">
+          <a href="https://github.com/ziyad-ahmed03" target="_blank" class="proj-link" title="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <h3>DuckDB Local Analytics Engine</h3>
+      <p>High-performance analytics pipeline on NYC Taxi + Citibike datasets using DuckDB & Parquet. Benchmarked SQL query performance, automated reports, and MLOps pipeline — DEPI graduation project.</p>
+      <div class="tags" style="margin-top:auto;padding-top:1rem;">
+        <span class="tag purple">Python</span><span class="tag purple">DuckDB</span>
+        <span class="tag purple">Parquet</span><span class="tag purple">Pandas</span>
+      </div>
+    </div>
+    <!-- Web Scraper -->
+    <div class="card project-card reveal reveal-delay-3">
+      <div class="project-top">
+        <div class="project-icon">🕷️</div>
+        <div class="project-links">
+          <a href="https://github.com/ziyad-ahmed03" target="_blank" class="proj-link" title="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <h3>Python Web Scraping Pipeline</h3>
+      <p>Structured scraper using BeautifulSoup — extracts multi-page quote data and organizes into nested author→{quotes, tags} dictionary. Clean, OOP-compatible code with pagination handling.</p>
+      <div class="tags" style="margin-top:auto;padding-top:1rem;">
+        <span class="tag">Python</span><span class="tag">BeautifulSoup</span>
+        <span class="tag">Jupyter</span><span class="tag">OOP</span>
+      </div>
+    </div>
+    <!-- GPA Calculator -->
+    <div class="card project-card reveal reveal-delay-4">
+      <div class="project-top">
+        <div class="project-icon">📊</div>
+        <div class="project-links">
+          <span class="proj-link" title="Excel Tool">📁</span>
+        </div>
+      </div>
+      <h3>Academic GPA Calculator — Excel</h3>
+      <p>9-sheet workbook covering BSU's full 4-year program. Automated credit-weighted GPA, pass/fail indicators, cumulative tracker — adopted by the faculty cohort for academic planning.</p>
+      <div class="tags" style="margin-top:auto;padding-top:1rem;">
+        <span class="tag">Excel</span><span class="tag">SUMPRODUCT</span>
+        <span class="tag">VLOOKUP</span><span class="tag">BSU</span>
+      </div>
+    </div>
+    <!-- Coming Soon -->
+    <div class="card project-card coming-soon-card reveal reveal-delay-1">
+      <div class="project-top">
+        <div class="project-icon">🔮</div>
+        <div class="coming-badge">Coming Soon</div>
+      </div>
+      <h3>Azure ETL Pipeline (Capstone)</h3>
+      <p>Automated end-to-end ETL pipeline with Apache Airflow orchestration, Azure Data Lake storage, and Synapse Analytics — DEPI capstone project.</p>
+      <div class="tags" style="margin-top:auto;padding-top:1rem;">
+        <span class="tag purple">Azure</span><span class="tag purple">Airflow</span>
+        <span class="tag purple">Synapse</span>
+      </div>
+    </div>
+    <!-- Pulse Oximeter -->
+    <div class="card project-card reveal reveal-delay-2">
+      <div class="project-top">
+        <div class="project-icon">🩺</div>
+        <div class="project-links">
+          <a href="https://github.com/ziyad-ahmed03" target="_blank" class="proj-link" title="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <h3>Pulse Oximeter (SpO2 Monitor)</h3>
+      <p>Arduino + MAX30102 sensor — measures SpO2 & heart rate via PPG principles, Beer-Lambert algorithm, digital filtering, OLED display, and threshold alarms.</p>
+      <div class="tags" style="margin-top:auto;padding-top:1rem;">
+        <span class="tag">Arduino</span><span class="tag">MAX30102</span>
+        <span class="tag">Signal Processing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<section id="contact">
+  <div class="reveal">
+    <div class="section-tag">Contact</div>
+    <h2 class="section-title">Get In <span>Touch</span></h2>
+    <div class="divider"></div>
+    <p class="section-sub">Whether you need freelance services, have a project idea, or just want to connect — I'm happy to hear from you.</p>
+  </div>
+  <div class="contact-layout">
+    <div class="reveal reveal-delay-1">
+      <div class="contact-info-cards">
+        <div class="contact-card">
+          <div class="cc-icon">✉️</div>
+          <div>
+            <div class="cc-label">Email</div>
+            <div class="cc-value">ziyad.ahmed.hashem@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon">📱</div>
+          <div>
+            <div class="cc-label">Phone / WhatsApp</div>
+            <div class="cc-value">+201212727518</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon">📍</div>
+          <div>
+            <div class="cc-label">Location</div>
+            <div class="cc-value">Nasser, Beni Suef, Egypt</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-socials">
+        <a href="https://github.com/ziyad-ahmed03" target="_blank" class="contact-social" title="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/ziyad-ahmed-bme" target="_blank" class="contact-social" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://www.fiverr.com/ziyad_ahmed01" target="_blank" class="contact-social" title="Fiverr">🎯</a>
+        <a href="https://freelancer.com/u/Ziyad003" target="_blank" class="contact-social" title="Freelancer">💼</a>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <!-- Replace YOUR_FORMSPREE_ID with your actual Formspree endpoint -->
+      <form class="contact-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="Ahmed Mohamed" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" placeholder="ahmed@example.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="CV writing project / Collaboration ...">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell me about your project or what you need help with..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary form-submit">Send Message →</button>
+        <p class="form-note">💡 Replace <code>YOUR_FORMSPREE_ID</code> in the HTML with your Formspree endpoint to activate this form. Register free at formspree.io</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="footer-name">Ziyad Ahmed <span>Hashem</span></div>
+  <p style="color:var(--text3);font-size:0.85rem;margin-bottom:0.5rem;">Biomedical Engineer · Data Engineering Student · Freelancer</p>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <p class="footer-copy">© 2025 Ziyad Ahmed Hashem · Built with HTML + CSS + JS · Deployed on GitHub Pages</p>
+</footer>
+
+<!-- ═══════════ MODALS ═══════════ -->
+
+<!-- Education Modal -->
+<div class="modal-overlay" id="edu-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('edu-modal')">✕</button>
+    <div class="modal-title">📚 Academic Details</div>
+    <div class="modal-sub">Beni Suef University — Biomedical Equipment Engineering · GPA 3.1 / B+ / 82%</div>
+    <h4 style="font-family:var(--font-display);font-size:1rem;margin-bottom:1rem;color:var(--cyan);">Relevant Coursework by Domain</h4>
+    <div class="dept-block">
+      <h4>🩺 Biomedical Equipment & Clinical Systems</h4>
+      <ul>
+        <li>Introduction to Biomedical Engineering</li>
+        <li>Biomedical Equipment I & II</li>
+        <li>Medical Electronics I & II</li>
+        <li>Therapeutic and Prosthetic Devices I & II</li>
+        <li>Medical Imaging Equipment</li>
+        <li>Clinical Laboratory Instrumentation</li>
+        <li>Biomedical Modeling & Simulation</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>🔧 Maintenance, Safety & Quality</h4>
+      <ul>
+        <li>Fault Detection and Preventive Maintenance Program</li>
+        <li>Quality Management in Medical Equipment Technology</li>
+        <li>Clinical Engineering & Health Care Organization</li>
+        <li>Ethical and Legal Issues — Biomedical Equipment</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>⚡ Electronics & Electrical Engineering</h4>
+      <ul>
+        <li>Electronic Circuits and Devices</li>
+        <li>Digital Circuits and Systems</li>
+        <li>Power Electronics</li>
+        <li>Instruments and Electrical Measurement</li>
+        <li>Integrated Circuit Technology</li>
+        <li>Mechatronics Engineering</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>🧬 Biomedical & Life Sciences</h4>
+      <ul>
+        <li>Basic Anatomy · Basic Physiology · Basic Histology</li>
+        <li>General Microbiology · Biomaterials</li>
+        <li>Biomechanics & Rehabilitation</li>
+        <li>Medical Terminology</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>🏥 Hospital Field Training</h4>
+      <ul>
+        <li>Field Training for Biomedical Equipment Technologist I (TBE 312)</li>
+        <li>Field Training for Biomedical Equipment Technologist II (TBE 412)</li>
+        <li>Research Project in Biomedical Equipment Technology (TBE 410)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Experience Modal -->
+<div class="modal-overlay" id="exp-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('exp-modal')">✕</button>
+    <div class="modal-title">🏥 Hospital Training — Department Breakdown</div>
+    <div class="modal-sub">Beni Suef University Hospital · Aug 2024 – Sep 2025 · 6 Clinical Departments</div>
+    <div class="dept-block">
+      <h4>🧪 Blood Bank & Clinical Laboratory</h4>
+      <ul>
+        <li>Hematology Analyzers (SYSMEX XN series, HORIBA Yumizen)</li>
+        <li>Clinical Chemistry Analyzers (ABBOTT Alinity c/i, Beckman Coulter)</li>
+        <li>Blood Gas & Coagulation Analyzers</li>
+        <li>Centrifuges (Eppendorf, Sigma), Blood Warmers, Plasma Thawers</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>📡 Radiology & Medical Imaging</h4>
+      <ul>
+        <li>Catheterization / DSA Systems (Philips Allura Xper, Siemens Artis, GE Innova)</li>
+        <li>CT Scanners, Digital X-ray Systems, C-arm Fluoroscopy</li>
+        <li>Ultrasound Systems (Esaote MyLab, Siemens Acuson)</li>
+        <li>PACS Workstations, Medical-Grade Dry Laser Printers</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>🔪 Operating Room (OR)</h4>
+      <ul>
+        <li>Anesthesia Machines (GE Healthcare Avance CS2, Carestation 650)</li>
+        <li>Electrosurgical Units — Monopolar & Bipolar (Erbe VIO, KLS Martin)</li>
+        <li>Endoscopy & Laparoscopy Systems (Olympus, Karl Storz, Stryker)</li>
+        <li>Autoclaves (Tuttnauer), Suction Machines, Operating Tables</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>💊 Intensive Care Unit (ICU)</h4>
+      <ul>
+        <li>Mechanical Ventilators (Dräger Evita 4, eVent Medical)</li>
+        <li>Patient Monitors (GE CARESCAPE B650, Philips IntelliVue, Nihon Kohden)</li>
+        <li>Infusion & Syringe Pumps (Fresenius Agilia, Mindray BeneFusion)</li>
+        <li>Defibrillators, ECG Machines, Pulse Oximeters, EtCO2 Monitors</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>🦽 Physiotherapy & Rehabilitation</h4>
+      <ul>
+        <li>Therapeutic Ultrasound Units (1 MHz & 3 MHz)</li>
+        <li>TENS / EMS Units, Short-Wave Diathermy, LLLT Devices</li>
+        <li>Cervical & Lumbar Traction Units (Motorized)</li>
+        <li>Hydrotherapy Equipment, EMG Biofeedback Units</li>
+      </ul>
+    </div>
+    <div class="dept-block">
+      <h4>🛏 General Wards</h4>
+      <ul>
+        <li>Bedside Multi-Parameter Monitors, Portable ECG Machines</li>
+        <li>Infusion & Syringe Pumps, Nebulizers, Glucometers (POC)</li>
+        <li>NIBP Monitors, Pulse Oximeters, Portable O₂ Concentrators</li>
+        <li>Wound Care & NPWT Units</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ */
+<script>
+// ── Theme Toggle ──
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', current === 'light' ? '' : 'light');
+  localStorage.setItem('theme', current === 'light' ? 'dark' : 'light');
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+})();
+
+// ── Mobile Menu ──
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+// ── Modals ──
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModal(overlay.id);
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+  }
+});
+
+// ── Scroll Reveal ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Skill Bars ──
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.bar-fill').forEach(bar => {
+        bar.style.width = bar.getAttribute('data-width') + '%';
+      });
+      barObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.skills-layout').forEach(el => barObserver.observe(el));
+
+// ── Smooth active nav ──
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 100;
+  sections.forEach(sec => {
+    const top = sec.offsetTop, h = sec.offsetHeight;
+    const link = document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+    if (link) link.style.color = (y >= top && y < top + h) ? 'var(--cyan)' : '';
+  });
+});
+
+// ── CV Download placeholder ──
+document.getElementById('cvDownload').addEventListener('click', e => {
+  e.preventDefault();
+  alert('CV download link coming soon! Contact via email in the meantime: ziyad.ahmed.hashem@gmail.com');
+});
+</script>
+</body>
+</html>
